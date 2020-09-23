@@ -6,4 +6,4 @@
 <br/>"id"
 
 "post" for at oprette en ny måling
-<br/>"name temp humidity"
+<br/>"id name temp humidity"
