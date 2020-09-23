@@ -102,13 +102,11 @@ namespace FanOutputTCPServer
             switch (method.ToLower())
             {
                 case "get":
-                    return ConvertObjectToJson(ref fanOutputReadings);
+                    return ConvertObjectToJson(fanOutputReadings);
                 case "getbyid":
-                    int n;
-                    if (int.TryParse(data, out n))
+                    if (int.TryParse(data, out int n))
                     {
-                        FanOutputModel fanOutputModel = fanOutputReadings.Find(i => i.Id == n);
-                        return ConvertObjectToJson(ref fanOutputModel);
+                        return ConvertObjectToJson(fanOutputReadings.Find(i => i.Id == n));
                     }
 
                     return "'" + data + "' is not a number!";
@@ -125,7 +123,7 @@ namespace FanOutputTCPServer
             return new FanOutputModel(Int32.Parse(inputStrings[0]), inputStrings[1], Int32.Parse(inputStrings[2]), Int32.Parse(inputStrings[3]));
         }
 
-        static string ConvertObjectToJson<T>(ref T obj)
+        static string ConvertObjectToJson<T>(T obj)
         {
             return JsonConvert.SerializeObject(obj);
         }
