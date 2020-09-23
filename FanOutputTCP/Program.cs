@@ -68,14 +68,11 @@ namespace FanOutputTCPServer
             {
                 while (socket.Connected)
                 {
-                    string method = string.Empty;
-                    string data = string.Empty;
-
                     NetworkStream ns = socket.GetStream();
 
                     StreamReader sr = new StreamReader(ns);
-                    method = sr.ReadLine();
-                    data = sr.ReadLine();
+                    string method = sr.ReadLine();
+                    string data = sr.ReadLine();
                     Console.WriteLine($"Received from {client}: {method}");
                     Console.WriteLine($"Received from {client}: {data}");
 
