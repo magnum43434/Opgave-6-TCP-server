@@ -79,7 +79,7 @@ namespace FanOutputTCPServer
                     Console.WriteLine($"Received from {client}: {method}");
                     Console.WriteLine($"Received from {client}: {data}");
 
-                    data = completeUsersAction(method, data);
+                    data = CompleteUsersAction(method, data);
 
                     if (method.ToLower() != "post")
                     {
@@ -98,45 +98,39 @@ namespace FanOutputTCPServer
             }
         }
 
-        static string completeUsersAction(string method, string data)
+        static string CompleteUsersAction(string method, string data)
         {
             if (method == null || data == null) {return "";}
 
             switch (method.ToLower())
             {
                 case "get":
-                    return convertObjectToJson(ref fanOutputReadings);
+                    return ConvertObjectToJson(ref fanOutputReadings);
                 case "getbyid":
                     int n;
                     if (int.TryParse(data, out n))
                     {
                         FanOutputModel fanOutputModel = fanOutputReadings.Find(i => i.Id == n);
-                        return convertObjectToJson(ref fanOutputModel);
+                        return ConvertObjectToJson(ref fanOutputModel);
                     }
 
                     return "'" + data + "' is not a number!";
                 case "post":
-                    fanOutputReadings.Add(convertFromJson(convertStringToJson(data)));
+                    fanOutputReadings.Add(ConvertStringToObject(data));
                     break;
             }
             return "";
         }
 
-        static string convertStringToJson(string data)
+        static FanOutputModel ConvertStringToObject(string data)
         {
             string[] inputStrings = data.Split(" ");
-            FanOutputModel fanOutput = new FanOutputModel(Int32.Parse(inputStrings[0]), inputStrings[1], Int32.Parse(inputStrings[2]), Int32.Parse(inputStrings[3]));
-            return JsonConvert.SerializeObject(fanOutput);
+            return new FanOutputModel(Int32.Parse(inputStrings[0]), inputStrings[1], Int32.Parse(inputStrings[2]), Int32.Parse(inputStrings[3]));
         }
 
-        static string convertObjectToJson<T>(ref T obj)
+        static string ConvertObjectToJson<T>(ref T obj)
         {
             return JsonConvert.SerializeObject(obj);
-        }
-
-        static FanOutputModel convertFromJson(string data)
-        {
-            return JsonConvert.DeserializeObject<FanOutputModel>(data);
         }
     }
 }
